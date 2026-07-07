@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#1f4f46">
+    <title>X射线探伤题库</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>X射线探伤题库</h1>
+          <p id="progressText">加载中</p>
+        </div>
+        <button class="icon-button" id="resetBtn" type="button" aria-label="重置本地记录" title="重置本地记录">↺</button>
+      </header>
+
+      <section class="stats-grid" aria-label="练习统计">
+        <div class="stat">
+          <span>总题</span>
+          <strong id="totalCount">0</strong>
+        </div>
+        <div class="stat">
+          <span>已答</span>
+          <strong id="doneCount">0</strong>
+        </div>
+        <div class="stat">
+          <span>错题</span>
+          <strong id="wrongCount">0</strong>
+        </div>
+        <div class="stat">
+          <span>正确率</span>
+          <strong id="accuracyText">0%</strong>
+        </div>
+      </section>
+
+      <nav class="mode-bar" aria-label="练习模式">
+        <button class="mode-button active" data-mode="all" type="button">全部</button>
+        <button class="mode-button" data-mode="wrong" type="button">错题</button>
+        <button class="mode-button" data-mode="random" type="button">随机</button>
+      </nav>
+
+      <section class="filters" aria-label="筛选">
+        <select id="sectionSelect" aria-label="章节">
+          <option value="all">全部章节</option>
+        </select>
+        <select id="typeSelect" aria-label="题型">
+          <option value="all">全部题型</option>
+          <option value="single">单选题</option>
+          <option value="multiple">多选题</option>
+        </select>
+      </section>
+
+      <section class="question-panel">
+        <div class="question-meta">
+          <span id="questionTag">第 0 题</span>
+          <span id="questionType">单选题</span>
+        </div>
+        <div class="image-wrap">
+          <img id="questionImage" alt="题目截图">
+        </div>
+        <div class="option-grid" id="optionGrid" aria-label="选项"></div>
+        <div class="answer-state" id="answerState" aria-live="polite"></div>
+      </section>
+
+      <footer class="actions">
+        <button class="ghost-button" id="prevBtn" type="button">上一题</button>
+        <button class="primary-button" id="submitBtn" type="button">提交</button>
+        <button class="ghost-button" id="nextBtn" type="button">下一题</button>
+      </footer>
+    </main>
+
+    <script src="data/questions.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
