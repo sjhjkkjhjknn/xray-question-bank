@@ -11,6 +11,7 @@
     order: [],
     selected: new Set(),
     revealed: false,
+    autoAdvanceTimer: null,
     records: loadRecords(),
   };
 
@@ -29,7 +30,6 @@
     optionGrid: document.getElementById("optionGrid"),
     answerState: document.getElementById("answerState"),
     prevBtn: document.getElementById("prevBtn"),
-    submitBtn: document.getElementById("submitBtn"),
     nextBtn: document.getElementById("nextBtn"),
     modeButtons: Array.from(document.querySelectorAll(".mode-button")),
   };
@@ -83,6 +83,7 @@
     }
     state.selected = new Set();
     state.revealed = false;
+    clearAutoAdvance();
   }
 
   function questionById(id) {
@@ -116,7 +117,6 @@
     renderStats();
     els.prevBtn.disabled = state.index <= 0;
     els.nextBtn.disabled = state.index >= state.order.length - 1;
-    els.submitBtn.disabled = !question || state.selected.size === 0;
 
     if (!question) {
       els.progressText.textContent = "当前筛选无题目";
@@ -157,17 +157,24 @@
     if (state.revealed) return;
     if (question.type === "single") {
       state.selected = new Set([option]);
+      submitAnswer();
+      return;
     } else if (state.selected.has(option)) {
       state.selected.delete(option);
     } else {
       state.selected.add(option);
     }
-    renderQuestion();
+    if (state.selected.size >= question.answer.length) {
+      submitAnswer();
+    } else {
+      renderQuestion();
+    }
   }
 
   function submitAnswer() {
     const question = currentQuestion();
     if (!question || state.selected.size === 0) return;
+    clearAutoAdvance();
     const chosen = Array.from(state.selected);
     const correct = sameAnswer(chosen, question.answer);
     state.revealed = true;
@@ -193,13 +200,23 @@
       ? `正确：${question.answer.join("、")}`
       : `错误，正确答案：${question.answer.join("、")}`;
     els.answerState.className = `answer-state ${correct ? "ok" : "bad"}`;
+    if (correct && state.index < state.order.length - 1) {
+      state.autoAdvanceTimer = window.setTimeout(() => goto(1), 550);
+    }
   }
 
   function goto(delta) {
+    clearAutoAdvance();
     state.index = Math.max(0, Math.min(state.order.length - 1, state.index + delta));
     state.selected = new Set();
     state.revealed = false;
     renderQuestion();
+  }
+
+  function clearAutoAdvance() {
+    if (!state.autoAdvanceTimer) return;
+    window.clearTimeout(state.autoAdvanceTimer);
+    state.autoAdvanceTimer = null;
   }
 
   function initFilters() {
@@ -231,7 +248,6 @@
       rebuildOrder();
       renderQuestion();
     });
-    els.submitBtn.addEventListener("click", submitAnswer);
     els.prevBtn.addEventListener("click", () => goto(-1));
     els.nextBtn.addEventListener("click", () => goto(1));
     els.resetBtn.addEventListener("click", () => {
