@@ -1,6 +1,6 @@
 {
-  "name": "X射线探伤题库",
-  "short_name": "探伤题库",
+  "name": "科研、生产及其他题库",
+  "short_name": "辐射题库",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f5f7f4",

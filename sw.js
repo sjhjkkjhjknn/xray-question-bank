@@ -1,4 +1,4 @@
-const CACHE_NAME = "xray-question-bank-v2";
+const CACHE_NAME = "xray-question-bank-v3";
 const CORE_ASSETS = [
   "./",
   "./index.html",

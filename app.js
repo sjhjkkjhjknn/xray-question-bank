@@ -1,7 +1,7 @@
 (function () {
   const bank = window.QUESTION_BANK;
   const questions = bank.questions;
-  const storageKey = "xray-question-bank:v1";
+  const storageKey = "research-production-question-bank:v1";
 
   const state = {
     mode: "all",
